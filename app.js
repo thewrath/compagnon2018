@@ -7,9 +7,12 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var sequelize = require('sequelize');
+var flash    = require('connect-flash');
 
 var config = require('./config/config');
 var dbConfig  = require('./config/database');
+
+ // pass passport for configuration
 
 var app = express();
 // view engine setup
@@ -28,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'pagnoncompa2018snirprojet' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-//app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(flash()); // use connect-flash for flash messages stored in session
 
 //db connection with sequelize
 const sequelizeInst = new sequelize(dbConfig.uri);
@@ -44,12 +47,22 @@ sequelizeInst
 
 //allow sequelize to create table inside the DB 
 sequelizeInst.sync();
+//load passport configuration 
+require('./config/passport')(passport, sequelizeInst);
+
+//MIDDLEWARES
+//login middleware
+var isLoggedIn = function(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/account/login');
+};
+
 //routes 
-require('./routes/index')(app, passport, sequelizeInst);
-require('./routes/users')(app, passport, sequelizeInst);
-require('./routes/message')(app, passport, sequelizeInst); 
-require('./routes/account')(app, passport, sequelizeInst);
-require('./routes/map')(app, passport, sequelizeInst);
+require('./routes/index')(app, passport, isLoggedIn, sequelizeInst);
+require('./routes/message')(app, passport,isLoggedIn, sequelizeInst); 
+require('./routes/account')(app, passport, isLoggedIn, sequelizeInst);
+require('./routes/map')(app, passport, isLoggedIn, sequelizeInst);
 
 
 

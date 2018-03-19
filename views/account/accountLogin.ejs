@@ -14,7 +14,9 @@
 				    <h1><span class="fa fa-sign-in"></span> Connexion</h1>
 
 				    <!-- show any messages that come back with authentication -->
-				    
+				    <% if (message.length > 0) { %>
+				        <div class="alert alert-danger"><%= message %></div>
+				    <% } %>
 
 				    <!-- LOGIN FORM -->
 				    <form action="/account/login" method="post">

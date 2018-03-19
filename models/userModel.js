@@ -2,40 +2,49 @@ var bcrypt = require('bcrypt-nodejs');
 
 //DEFINITION de user 
 module.exports = (sequelize, DataTypes) => {
-	var User = sequelize.define('user', {
+	var User = sequelize.define('User', {
 		id: {
-			type: Sequelize.INTEGER; 
+			type: DataTypes.UUID,
+      		defaultValue: DataTypes.UUIDV4,
+      		allowNull: false,
+      		primaryKey: true, 
 		},
 		username: {
-			type: Sequelize.STRING; 
+			type: DataTypes.STRING, 
 		},
 		password: {
-			type: Sequelize.STRING; 
+			type: DataTypes.STRING, 
+			allowNull: false,
 		},
 		email: {
-			type: Sequelize.STRING; 
+			type: DataTypes.STRING, 
+			validate: {
+                isEmail: true
+            },
 		},
 		adresse: {
-			type: Sequelize.STRING; 
+			type: DataTypes.STRING, 
 		},
 		city:{
-			type: Sequelize.STRING;
+			type: DataTypes.STRING,
 		},
 		state: {
-			type: Sequelize.STRING; 
+			type: DataTypes.STRING, 
 		},
 		zip: {
-			type: Sequelize.INTEGER; 
+			type: DataTypes.INTEGER, 
 		},
-		linkWith{
-			type: Sequelize.INTEGER;
+		linkWith: {
+			type: DataTypes.INTEGER,
 		}
 	});
 	User.prototype.generateHash = function(password) {
 		return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 	};
 	User.prototype.validPassword = function(password) {
-		return bcrypt.compareSync(password, this.local.password);	
+		return bcrypt.compareSync(password, this.password);	
 	};
 	return User;
 };
+
+/////////////////////// réecrire les données 

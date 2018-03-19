@@ -14,7 +14,9 @@
 				    <h1><span class="fa fa-sign-in"></span> Inscription </h1>
 
 				    <!-- show any messages that come back with authentication -->
-				    
+				    <% if (message.length > 0) { %>
+				        <div class="alert alert-danger"><%= message %></div>
+				    <% } %>
 
 				    <!-- REGISTER FORM -->
 				    <form action="/account/register" method="post">
@@ -27,7 +29,7 @@
 				            <input type="password" class="form-control" name="password">
 				        </div>
 
-				        <button type="submit" class="btn btn-warning btn-lg">S'inscrire</button>
+				        <button type="submit" class="btn btn-warning btn-lg">Inscription</button>
 				    </form>
 
 				    <hr>

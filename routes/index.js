@@ -1,8 +1,8 @@
 
 /// BOOK ROUTES /// 
-module.exports = function(router, passport, sequelize){
+module.exports = function(router, passport, isLoggedIn, sequelize){
 	//Require controller modules 
 	var main_controller = require('../controllers/mainController');
-	// GET home page
-	router.get('/', main_controller.index);
+	router.get('/', isLoggedIn, main_controller.index);
+	router.get('/discover', main_controller.discover);
 };
