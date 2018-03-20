@@ -1,20 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<% include ../partials/head %>
-		<script type="text/javascript" src="https://bernii.github.io/gauge.js/dist/gauge.min.js"></script>
-	</head>
-	<body class="container">
-		<header>
-    		<% include ../partials/header%>
-		</header>
-		<main>
-	    	<div class="jumbotron">
-	    		Bienvenue sur Compagnon JS 
-	    	</div>	
-		</main>
-		<footer>
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<!-- load fontawesome -->
+ <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> 
+ <!-- CSS (load bootstrap from a CDN) -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Bienvenue sur compagnon JS !</h1>
+  <p>BTS SNIR 2017-2018</p> 
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Amuser</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Maintenir</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Securiser</h3>        
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+  </div>
+  <div class="row">
+  	<div class="col-sm-4 col-sm-offset-1">
+  						<center><h2>S'inscrire !</h2></center>
+				    	<a href="/account/register" class="thumbnail">
+				      		<img src="http://cdn.onlinewebfonts.com/svg/img_314409.png" class="img-responsive" alt="">
+				    	</a>
+				  	</div>
+	<div class="col-sm-4 col-sm-offset-2">
+  						<center><h2>Se connecter !</h2></center>
+				    	<a href="/account/login" class="thumbnail">
+				      		<img src="data:image/png;base64,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" class="img-responsive" alt="">
+				    	</a>
+				  	</div>
+  </div>
+</div>
+<footer>
 	    	<% include ../partials/footer %>
 		</footer>
-	</body>
+</body>
 </html>

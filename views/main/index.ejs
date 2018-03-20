@@ -11,19 +11,19 @@
 		<main>
 	    	<div class="jumbotron">
 	    		<div class="row">
-			  		<div class="col-xs-6 col-md-4">
+			  		<div class="col-sm-4">
 				    	<a href="/map" class="thumbnail">
 			    			<span class="badge badge-pill badge-success">Nouvelle chute</span>
 				      		<img src="http://simpleicon.com/wp-content/uploads/map-7.svg" alt="" class="img-responsive">
 				    	</a>
 				  	</div>
-				  	<div class="col-xs-6 col-md-4">
+				  	<div class="col-sm-4">
 				    	<a href="/message" class="thumbnail">
 				    		<span class="badge badge-pill badge-success">Nouveau message</span>
 				      		<img src="https://images.vexels.com/media/users/3/136394/isolated/preview/83b45fcfc188a8f4a9daef936855b019-message-icon-by-vexels.png" alt="" class="img-responsive">
 				    	</a>
 				  	</div>
-				  	<div class="col-xs-6 col-md-4">
+				  	<div class="col-sm-4">
 				    	<a href="/account/manage" class="thumbnail" >
 				    		<span class="badge badge-pill badge-success">Mise à jour compte</span>
 				      		<img src="https://euroskateshop.fr/skin/frontend/ultimo/default/images/icon-account.svg" alt="" class="img-responsive">
@@ -31,67 +31,13 @@
 				  	</div>
 				</div>    
 		    <div class="row">
-		    	<center>
-		    		<h2>Comment ça va ?</h2>
-		    	</center><a href="/index">
-		    	<center>
-		    		<h3>
-		    			<select class="form-control" style="">	
-						      
-				    	</select>
-			    	</h3>
-		    	</center>
-		    	<center>
-		    		<h3>Avis du personnel aide-soignant : </h3>
-	    		</center>
-		    	<center>
-		    		<img id="iconeContent" src="https://www.quadran.eu/wp-content/uploads/2017/04/smileyvert.png"  class="img-responsive">
-		    		<canvas id="avisPersonnel"></canvas>
-		    	</center>
-		    	<center>
-		    		<h2>Avis de :</h2>
-		    	</center>
-		    	<center>
-		    		<canvas id="avisSenior"></canvas>
-	    		</center>
-		    </div>
-		    <!-- SCRIPT JS -->
-		    <script type="text/javascript">
-			    var opts = {
-				  angle: 0.15,
-				  lineWidth: 0.44, 
-				  radiusScale: 1, 
-				  pointer: {
-				    length: 0.6,
-				    strokeWidth: 0.035, 
-				    color: '#000000' 
-				  },
-				  limitMax: false,     
-				  limitMin: false,    
-				  colorStart: '#E71A1A',   
-				  colorStop: '#23EA41',    
-				  percentColors: [[0.0, "#E71A1A" ], [0.50, "#DD9D22"], [1.0, "#23EA41"]],
-				  strokeColor: '#E0E0E0',  
-				  generateGradient: true,
-				  highDpiSupport: true,     
-				};
-				var target = document.getElementById('avisPersonnel'); 
-				var gauge = new Gauge(target).setOptions(opts); 
-				gauge.maxValue = 3000; 
-				gauge.setMinValue(0);  
-				gauge.animationSpeed = 32; 
-				var value = 2000;
-				gauge.set(value);
-				if(value <= gauge.maxValue/3){
-					$("#iconeContent").attr('src', 'https://www.quadran.eu/wp-content/uploads/2017/04/smileyrouge-1.png')
-				}
-				else if(value <= gauge.maxValue/2){
-					$("#iconeContent").attr('src', 'https://www.quadran.eu/wp-content/uploads/2017/04/smileyjaune-1.png')
-				}
-				else{
-					$("#iconeContent").attr('src', 'https://www.quadran.eu/wp-content/uploads/2017/04/smileyvert.png')
-				}
-			</script>
+		  	<div class="col-sm-4 col-sm-offset-4">
+		  						<center><h2>Mes compagnons :</h2></center>
+						    	<a href="/group/" class="thumbnail">
+						      		<img src="https://png.icons8.com/metro/1600/groups.png" class="img-responsive" alt="">
+						    	</a>
+						  	</div>
+		  </div>
 		</main>
 		<footer>
 	    	<% include ../partials/footer %>

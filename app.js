@@ -58,10 +58,17 @@ var isLoggedIn = function(req, res, next) {
     res.redirect('/account/login');
 };
 
+var isNotLoggedIn = function(req, res, next) {
+  if(!req.isAuthenticated())
+    return next();
+  res.redirect('/account/manage');
+};
+
 //routes 
 require('./routes/index')(app, passport, isLoggedIn, sequelizeInst);
+require('./routes/group')(app, passport, isLoggedIn, sequelizeInst);
 require('./routes/message')(app, passport,isLoggedIn, sequelizeInst); 
-require('./routes/account')(app, passport, isLoggedIn, sequelizeInst);
+require('./routes/account')(app, passport, isLoggedIn, isNotLoggedIn, sequelizeInst);
 require('./routes/map')(app, passport, isLoggedIn, sequelizeInst);
 
 

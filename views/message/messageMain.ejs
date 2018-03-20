@@ -10,8 +10,46 @@
 		</header>
 		<main>
 			<div class="jumbotron">
-				<h1>Message</h1>
-			</div>
+				<ul class="nav nav-pills">
+				    <li class="active"><a data-toggle="pill" href="#sendedMessage">Messages envoyés</a></li>
+				    <li><a data-toggle="pill" href="#receivedMessage">Messages reçus</a></li>
+				    <li><a data-toggle="pill" href="#send">Envoyer un message</a></li>
+				  </ul>
+				  <br>
+				<div class="tab-content">
+					<div id="sendedMessage" class="tab-pane fade in active">
+						<!-- message a lire-->
+						<div class="panel-group">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+							      <img src="https://www.w3schools.com/bootstrap/img_avatar1.png" class="media-object" style="width:60px">
+							    Message subject : from : user </div>
+								<div class="panel-body"> Message Content preview </div>	
+							</div>
+						<!-- Message lu--> 
+							<div class="panel panel-info">
+								<div class="panel-heading">
+							      <img src="https://www.w3schools.com/bootstrap/img_avatar1.png" class="media-object" style="width:60px">
+							    Message subject : from : user </div>
+								<div class="panel-body"> Message Content preview </div>	
+							</div>
+						</div>
+					</div>
+
+					<div id="receivedMessage" class="tab-pane fade">
+						<div class="panel-group">
+							<div class="panel panel-success">
+								<div class="panel-heading">Message subject : from : user </div>
+								<div class="panel-body"> Message Content preview </div>	
+							</div>
+						</div>
+					</div>
+
+					<div id="send" class="tab-pane fade">
+						
+					</div>
+					</div>
+				</div>
 		</main>
 		<footer>
 	    	<% include ../partials/footer %>

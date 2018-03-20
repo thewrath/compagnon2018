@@ -3,15 +3,44 @@
 	<head>
 		<% include ../partials/head %>
 		<script type="text/javascript" src="https://bernii.github.io/gauge.js/dist/gauge.min.js"></script>
+		<style>
+	      /* Always set the map height explicitly to define the size of the div
+	       * element that contains the map. */
+	       #map{
+	       		min-height: 1000px; 
+	       }
+	    </style>
 	</head>
 	<body class="container">
 		<header>
     		<% include ../partials/header %>
 		</header>
 		<main>
-			<div class="jumbotron">
-				<h1>Map</h1>
-			</div>
+			<div id="map" class="jumbotron"></div>
+			<div class="jumbotron"></div>
+			<script>
+      		var map;
+      		function initMap() {
+        	map = new google.maps.Map(document.getElementById("map"), {
+          		center: {lat: 47.75, lng: -3.36},
+          		zoom: 13
+        	});
+
+    		}
+    		function addLocation(){
+    			var latitude = parseFloat(document.getElementById("inputLatitude").value);
+    			var longitude = parseFloat(document.getElementById("inputLongitude").value);
+    			var pos = {lat: latitude, lng: longitude};
+	      		var marker = new google.maps.Marker({
+	      			position: {lat: latitude, lng: longitude},
+	      			map: map
+	        });
+        		map.setCenter({lat: latitude, lng:longitude});
+    		}
+	    	</script>
+	    	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABVH_4LJefZbaHMAFrNYIo9DEJFlj5ESA&callback=initMap"
+	    	async defer></script>
+        
 		</main>
 		<footer>
 	    	<% include ../partials/footer %>
