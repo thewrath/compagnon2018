@@ -1,6 +1,6 @@
 //load bcrypt
 var bCrypt = require('bcrypt-nodejs');
- 
+
  
 module.exports = function(passport, sequelize) {
  
@@ -38,7 +38,21 @@ module.exports = function(passport, sequelize) {
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
  
             };
- 
+            var generateAvatar = function(email) {
+            	//create users directory 
+            	var fs = require('fs');
+            	var userDir = require('path').join(process.env.PWD, '/public/images/users/'+email); 
+            	
+            	if(!fs.existsSync(userDir)){
+            		fs.mkdirSync(userDir);
+            	}
+
+				var identicon = require('identicon'); 
+				identicon.generate({ id : email, size : 400}, function(err, buffer){
+					if(err) throw err; 
+					fs.writeFileSync(require('path').join(process.env.PWD, '/public/images/users/'+email+'/avatar'+'.png'), buffer); 
+				});
+ 			}
  
  			process.nextTick(function() {
 	            User.findOne({
@@ -81,7 +95,7 @@ module.exports = function(passport, sequelize) {
 	                        }
 	 
 	                        if (newUser) {
-	 
+	 							generateAvatar(email);
 	                            return done(null, newUser);
 	 
 	                        }

@@ -25,4 +25,6 @@ module.exports = function(router, passport, isLoggedIn, isNotLoggedIn,sequelize)
 		failureFlash: true 
 	}));
 
+	router.get(prefix+'/logout', isLoggedIn, account_controller.logout_get);
+
 };

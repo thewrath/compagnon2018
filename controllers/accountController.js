@@ -40,6 +40,11 @@ function accountController(passport){
 	this.manage_post = function(req, res){
 		res.redirect('/account/management', {connected : req.isAuthenticated()});
 	};
+
+	this.logout_get = function(req, res){
+		req.logOut();
+		res.redirect('/discover');
+	}
 }
 //all post method are directly inside the router 
 
