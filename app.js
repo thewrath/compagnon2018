@@ -32,7 +32,8 @@ app.use(session({ secret: 'pagnoncompa2018snirprojet' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
-
+var dir = path.join(__dirname, 'public'); 
+app.use(express.static(dir));
 //db connection with sequelize
 const sequelizeInst = new sequelize(dbConfig.uri);
 

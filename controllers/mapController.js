@@ -11,5 +11,5 @@
  */
 
 exports.index = function(req, res){
-	res.render('map/map', { data : null });
+	res.render('map/map', { connected : req.isAuthenticated() });
 };

@@ -11,7 +11,7 @@
  */
 
 exports.index = function(req, res){
-	res.render('message/messageMain', {data : null});
+	res.render('message/messageMain', {connected : req.isAuthenticated()});
 };
 
 /**
@@ -25,7 +25,7 @@ exports.index = function(req, res){
  */
 
 exports.message_sended_list = function(req, res){
-	res.send("NOT IMPLEMENTED YET");
+	res.send("NOT IMPLEMENTED YET",{ connected : req.isAuthenticated() });
 };
 
 /**
@@ -39,7 +39,7 @@ exports.message_sended_list = function(req, res){
  */
 
 exports.message_received_list = function(req, res){
-	res.send("NOT IMPLEMENTED YET");
+	res.send("NOT IMPLEMENTED YET", { connected : req.isAuthenticated() });
 };
 
 /**
@@ -53,7 +53,7 @@ exports.message_received_list = function(req, res){
  */
 
 exports.message_get = function(req, res){
-	res.send("NOT IMPLEMENTED YET");
+	res.send("NOT IMPLEMENTED YET" , { connected : req.isAuthenticated() });
 };
 
 /**
@@ -67,6 +67,6 @@ exports.message_get = function(req, res){
  */
 
 exports.message_post = function(req, res){
-	res.send("NOT IMPLEMENTED YET");
+	res.send("NOT IMPLEMENTED YET", { connected : req.isAuthenticated() });
 };
 

@@ -3,7 +3,7 @@ function accountController(passport){
 	this.passport = passport;
 
 	this.login_get = function(req, res){
-		res.render('account/accountLogin', { message: req.flash('loginMessage') });
+		res.render('account/accountLogin', { connected : req.isAuthenticated(), message: req.flash('loginMessage') });
 	};
 
 	/*this.login_post = function(req, res){
@@ -15,7 +15,7 @@ function accountController(passport){
 	};*/
 
 	this.register_get = function(req, res){
-		res.render('account/accountRegister', { message: req.flash('signupMessage') });
+		res.render('account/accountRegister', { connected : req.isAuthenticated(), message: req.flash('signupMessage') });
 	};
 
 	/*this.register_post = function(req, res){
@@ -28,11 +28,17 @@ function accountController(passport){
 	};*/
 
 	this.manage_get = function(req, res){
-		res.render('account/accountManagement', {data : null});
+		console.log(req);
+		var user = req.user;
+		//remove password sensible and generate avatar path 
+		user.password = "";
+		user.avatarPath = req.protocol+"://"+req.hostname+":3000/images/users/"+user.email+"/avatar.png"; 
+		console.log(user);
+		res.render('account/accountManagement', {connected : req.isAuthenticated(), user : user});
 	};
 
 	this.manage_post = function(req, res){
-		res.redirect('/account/management', { data : null });
+		res.redirect('/account/management', {connected : req.isAuthenticated()});
 	};
 }
 //all post method are directly inside the router 

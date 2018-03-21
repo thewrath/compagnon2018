@@ -6,16 +6,21 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="/">Compagnon JS</a>
+      <a class="navbar-brand" href="/"><span class=" glyphicon glyphicon-th" style="font-size:32px; color: #f67615;"></span></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="/message">Message</a></li>
-        <li><a href="/map">Map</a></li>
+        <li><a href="/message"><span class="glyphicon glyphicon-envelope" style="font-size:32px; color: #2aa7df;" ></span></a></li>
+        <li><a href="/map"><span class="glyphicon glyphicon-map-marker" style="font-size:32px; color: #ea262a;"></span></a></li>
+        <li><a href="/group"><span class="glyphicon glyphicon-tree-deciduous" style="font-size:32px; color: #82b541;"></span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/account/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="/account/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <% if (!connected) { %>
+            <li><a href="/account/register"><span class="glyphicon glyphicon-user" style="font-size:32px;"></span></a></li>
+            <li><a href="/account/login"><span class="glyphicon glyphicon-log-in" style="font-size:32px;"></span></a></li>
+      <% } else { %>
+        <li><a href="/account/manage"><span class="glyphicon glyphicon-user" style="font-size:32px; color: #b4211e;"></span></a></li>
+      <% } %>
       </ul>
     </div>
   </div>
