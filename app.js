@@ -50,7 +50,8 @@ sequelizeInst
 sequelizeInst.sync();
 //load passport configuration 
 require('./config/passport')(passport, sequelizeInst);
-
+//load message configuration 
+const message = require('./config/message')(sequelizeInst);
 //MIDDLEWARES
 //login middleware
 var isLoggedIn = function(req, res, next) {
@@ -68,7 +69,7 @@ var isNotLoggedIn = function(req, res, next) {
 //routes 
 require('./routes/index')(app, passport, isLoggedIn, sequelizeInst);
 require('./routes/group')(app, passport, isLoggedIn, sequelizeInst);
-require('./routes/message')(app, passport,isLoggedIn, sequelizeInst); 
+require('./routes/message')(app, passport, message, isLoggedIn, sequelizeInst); 
 require('./routes/account')(app, passport, isLoggedIn, isNotLoggedIn, sequelizeInst);
 require('./routes/map')(app, passport, isLoggedIn, sequelizeInst);
 

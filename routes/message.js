@@ -1,7 +1,7 @@
 //Contient la liste des routes relativent à message 
-module.exports = function(router, passport, isLoggedIn, sequelize){ 
+module.exports = function(router, passport, message, isLoggedIn, sequelize){ 
 	//Require controller modules 
-	var message_controller = require('../controllers/messageController');
+	var message_controller = require('../controllers/messageController')(message);
 	var prefix = '/message';
 	/// BOOK ROUTES /// 
 

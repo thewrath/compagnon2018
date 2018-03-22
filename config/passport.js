@@ -32,7 +32,6 @@ module.exports = function(passport, sequelize) {
  
  
         function(req, email, password, done) {
- 			console.log("function for the local signup is called");
             var generateHash = function(password) {
  
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
@@ -70,38 +69,46 @@ module.exports = function(passport, sequelize) {
 	                } else
 	 
 	                {
-	 					
-	                    var userPassword = generateHash(password);
-	 
-	                    var data =
-	 
-	                        {
-	                            email: email,
-	 
-	                            password: userPassword,
-	 
-	                            firstname: req.body.firstname,
-	 
-	                            lastname: req.body.lastname
-	 
-	                        };
-	 
-	                    User.create(data).then(function(newUser, created) {
-	 
-	                        if (!newUser) {
-	 
-	                            return done(null, false);
-	 
-	                        }
-	 
-	                        if (newUser) {
-	 							generateAvatar(email);
-	                            return done(null, newUser);
-	 
-	                        }
-	 
-	                    });
-	 
+	 					User.findOne({
+	 						where: {
+	 							username: req.body.username
+	 						}
+	 					}).then(function(user){
+
+	 						if(user){
+	 							return done(null, false, req.flash('signupMessage', 'Ce nom est deja utilise '));
+	 						}
+	 						else{
+	 							var userPassword = generateHash(password);
+			                    var data =
+			 
+			                        {
+			                            email: email,
+			 
+			                            password: userPassword,
+			 
+			                            username: req.body.username,
+			 
+			                        };
+			 
+			                    User.create(data).then(function(newUser, created) {
+			 
+			                        if (!newUser) {
+			 
+			                            return done(null, false);
+			 
+			                        }
+			 
+			                        if (newUser) {
+			 							generateAvatar(email);
+			                            return done(null, newUser);
+			 
+			                        }
+			 
+			                    });
+	 						}
+	 						
+	 					});
 	                }
 	 
 	            });

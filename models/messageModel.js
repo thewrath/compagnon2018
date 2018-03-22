@@ -1,14 +1,26 @@
+//DEFINITION de message 
 module.exports = (sequelize, DataTypes) => {
-  Message = sequelize.define('Message', {
+  var Message = sequelize.define('Message', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-      primaryKey: true,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true, 
     },
-  },
+    fromUserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false, 
+    },
+    toUserId: {
+      type : DataTypes.INTEGER,
+      allowNull: false,
+
+    }, 
+    content: {
+      type : DataTypes.TEXT,
+      allowNull: false,
+    },
+    
   });
-
+  
   return Message;
-
 };

@@ -50,7 +50,7 @@ function accountController(passport){
 
 module.exports = function(passport){
 	return new accountController(passport);
-}
+}; 
 
 
 
