@@ -12,6 +12,6 @@ module.exports = function(router, passport, message, isLoggedIn, sequelize){
 	//GET list of sended messages 
 	router.get(prefix+'/list/sended', isLoggedIn, message_controller.message_sended_list); 
 	//POST MESSAGE 
-	router.get(prefix+'/send', isLoggedIn, message_controller.message_post);
+	router.post(prefix+'/send', isLoggedIn, message_controller.message_post);
 
 }

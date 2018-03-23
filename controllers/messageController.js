@@ -2,7 +2,7 @@
 function messageController(message){
 
 	this.index = function(req, res){
-		res.render('message/messageMain', {connected : req.isAuthenticated()});
+		res.render('message/messageMain', { connected : req.isAuthenticated(), message: req.flash('addMessage'), success : req.flash('success')});
 	};
 
 	this.message_sended_list = function(req, res){
@@ -18,7 +18,13 @@ function messageController(message){
 	};
 
 	this.message_post = function(req, res){
-		res.send("NOT IMPLEMENTED YET", { connected : req.isAuthenticated() });
+		console.log("emmetteur : ");
+		console.log(req.user.username);
+		console.log("Destinataire :"); 
+		console.log(req.body.username);
+		message.addMessage(req, req.user.username,req.body.username, req.body.content, req.body.object, function(success){
+			res.redirect('/message'); 
+		}); 	
 	};
 
 }

@@ -10,14 +10,61 @@
 		</header>
 		<main>
 			<div class="jumbotron">
+				<!-- Show send message status -->
+				    <% if (message.length > 0) { %>
+				        <% if(success.length > 0) { %>
+				        	<div class="alert alert-success"><%= message %></div>
+				        <% } else {%>
+				        	<div class="alert alert-danger"><%= message %></div>
+				        <% } %>
+				    <% } %>
 				<ul class="nav nav-pills">
-				    <li class="active"><a data-toggle="pill" href="#receivedMessage">Messages reçus</a></li>
+				    <li class="active"><a data-toggle="pill" href="#send">Envoyer un message</a></li>
+				    <li><a data-toggle="pill" href="#receivedMessage">Messages reçus</a></li>
 				    <li><a data-toggle="pill" href="#sendedMessage">Messages envoyés</a></li>
-				    <li><a data-toggle="pill" href="#send">Envoyer un message</a></li>
 				  </ul>
 				  <br>
 				<div class="tab-content">
-					<div id="receivedMessage" class="tab-pane fade in active">
+					<!-- Envoyer un message -->
+					<div id="send" class="tab-pane fade in active">
+						
+						<form class="form-horizontal" role="form" method="post" action="/message/send">
+							<div class="form-group">
+								<label for="username" class="col-sm-2 control-label">Nom d'utilisateur</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="username" name="username" placeholder="Nom d'utilisateur" value="">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="object" class="col-sm-2 control-label">Objet</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="object" name="object" placeholder="Objet" value="">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="content" class="col-sm-2 control-label">Contenu</label>
+								<div class="col-sm-10">
+									<textarea class="form-control" rows="4" name="content"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="human" class="col-sm-2 control-label">2 + 3 = ?</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="human" name="human" placeholder="Réponse">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-10 col-sm-offset-2">
+									<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-10 col-sm-offset-2">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div id="receivedMessage" class="tab-pane fade">
 						<!-- message a lire-->
 						<div class="panel-group">
 							<div class="panel panel-primary">
@@ -44,44 +91,7 @@
 							</div>
 						</div>
 					</div>
-
-					<div id="send" class="tab-pane fade">
-						<form class="form-horizontal" role="form" method="post" action="index.php">
-							<div class="form-group">
-								<label for="name" class="col-sm-2 control-label">Nom d'utilisateur</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="name" name="name" placeholder="Nom d'utilisateur" value="">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="object" class="col-sm-2 control-label">Objet</label>
-								<div class="col-sm-10">
-									<input type="email" class="form-control" id="email" name="email" placeholder="Objet" value="">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="message" class="col-sm-2 control-label">Message</label>
-								<div class="col-sm-10">
-									<textarea class="form-control" rows="4" name="message"></textarea>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="human" class="col-sm-2 control-label">2 + 3 = ?</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="human" name="human" placeholder="Réponse">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-10 col-sm-offset-2">
-									<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-10 col-sm-offset-2">
-								</div>
-							</div>
-						</form>
-					</div>
+					
 					</div>
 				</div>
 		</main>
