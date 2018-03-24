@@ -2,6 +2,7 @@
 function messageController(message){
 
 	this.index = function(req, res){
+		message.getMessagesFromUser(req);
 		res.render('message/messageMain', { connected : req.isAuthenticated(), message: req.flash('addMessage'), success : req.flash('success')});
 	};
 
@@ -18,10 +19,7 @@ function messageController(message){
 	};
 
 	this.message_post = function(req, res){
-		console.log("emmetteur : ");
-		console.log(req.user.username);
-		console.log("Destinataire :"); 
-		console.log(req.body.username);
+		console.log(req);
 		message.addMessage(req, req.user.username,req.body.username, req.body.content, req.body.object, function(success){
 			res.redirect('/message'); 
 		}); 	

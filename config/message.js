@@ -14,8 +14,15 @@ function message(sequelize){
 		});
 	};
 
-	var findUserNameWithId = function(name){
-		return 2;
+	var findUserNameWithId = function(id, done){
+		User.findOne({
+			where: {
+				id: id
+			}, 
+			attributes:['username'],
+			}).then(function(user){
+				done(user.dataValues.username); 
+			});
 	}; 
 	//add handle for done is not a function 
 	this.addMessage = function(req, from, to, content, object, done){
@@ -56,6 +63,43 @@ function message(sequelize){
 				req.flash('addMessage', "Messagerie error");
 				return done(false); 
 			}
+		});
+	};
+
+	this.getMessagesFromUser = function(req, done){
+		var datas = {}; 
+		Message.findAll({
+			where: {
+				fromUserId: req.user.id 
+			}, 
+			attributes:['toUserId','object','content'],
+		}).then(function(messages){
+			for (var i = messages.length - 1; i >= 0; i--) {
+				datas[i] = messages[i].dataValues
+				this.findUserNameWithId(messages.dataValues.toUserId, function(username){
+					datas[i].username = username;
+				});
+			}
+			done(datas);
+		});
+		
+	};
+
+	this.getMessagesToUser = function(req, done){
+		var datas = {};
+		Message.findAll({
+			where: {
+				toUserId: req.user.id 
+			}, 
+			attributes:['fromUserId','object','content'],
+		}).then(function(messages){
+			for (var i = messages.length - 1; i >= 0; i--) {
+				datas[i] = messages[i].dataValues
+				this.findUserNameWithId(messages.dataValues.fromUserId, function(username){
+					datas[i].username = username;
+				});
+			}
+			done(datas); 
 		});
 	};
 };
