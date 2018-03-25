@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		linkWith: {
 			type: DataTypes.INTEGER,
-		}
+		}, 
 	});
 	User.prototype.generateHash = function(password) {
 		return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);

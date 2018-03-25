@@ -14,14 +14,14 @@ function message(sequelize){
 		});
 	};
 
-	var findUserNameWithId = function(id, done){
+	var findUserNameWithId = function(index, id, done){
 		User.findOne({
 			where: {
 				id: id
 			}, 
-			attributes:['username'],
+			attributes:['username', 'email'],
 			}).then(function(user){
-				done(user.dataValues.username); 
+				done(user.dataValues, index); 
 			});
 	}; 
 	//add handle for done is not a function 
@@ -67,7 +67,7 @@ function message(sequelize){
 	};
 
 	this.getMessagesFromUser = function(req, done){
-		var datas = {}; 
+		var datas = [];
 		Message.findAll({
 			where: {
 				fromUserId: req.user.id 
@@ -75,18 +75,24 @@ function message(sequelize){
 			attributes:['toUserId','object','content'],
 		}).then(function(messages){
 			for (var i = messages.length - 1; i >= 0; i--) {
-				datas[i] = messages[i].dataValues
-				this.findUserNameWithId(messages.dataValues.toUserId, function(username){
-					datas[i].username = username;
+				datas[i] = messages[i].dataValues;
+				//i need to be pass to the callback (undefined error catch)
+				findUserNameWithId(i, messages[i].dataValues.toUserId, function(user, index){
+					datas[index]["username"] = user.username;
+					datas[index]["email"] = user.email;
+					//need because node is async 
+					if(index == 0){
+						done(datas); 
+					} 
 				});
 			}
-			done(datas);
+			
 		});
 		
 	};
 
 	this.getMessagesToUser = function(req, done){
-		var datas = {};
+		var datas = [];
 		Message.findAll({
 			where: {
 				toUserId: req.user.id 
@@ -95,11 +101,15 @@ function message(sequelize){
 		}).then(function(messages){
 			for (var i = messages.length - 1; i >= 0; i--) {
 				datas[i] = messages[i].dataValues
-				this.findUserNameWithId(messages.dataValues.fromUserId, function(username){
-					datas[i].username = username;
+				findUserNameWithId(i, messages[i].dataValues.fromUserId, function(user, index){
+					datas[index].username = user.username;
+					datas[index]["email"] = user.email;
+					if(index == 0){
+						done(datas); 
+					} 
 				});
 			}
-			done(datas); 
+			
 		});
 	};
 };

@@ -7,11 +7,6 @@ module.exports = function(router, passport, message, isLoggedIn, sequelize){
 
 	// GET home page 
 	router.get(prefix+'/', isLoggedIn, message_controller.index);
-	//GET list of received messages 
-	router.get(prefix+'/list/received', isLoggedIn, message_controller.message_received_list);
-	//GET list of sended messages 
-	router.get(prefix+'/list/sended', isLoggedIn, message_controller.message_sended_list); 
-	//POST MESSAGE 
 	router.post(prefix+'/send', isLoggedIn, message_controller.message_post);
 
 }
