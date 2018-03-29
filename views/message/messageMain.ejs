@@ -60,31 +60,30 @@
 					</div>
 					<div id="receivedMessage" class="tab-pane fade">
 						<!-- message a lire-->
-						<div class="panel-group">
 						<% for (var i = messagesTo.length - 1; i >= 0; i--){ %>
-							
-								<div class="panel panel-primary">
-									<div class="panel-heading">
-								      <img src="https://www.w3schools.com/bootstrap/img_avatar1.png" class="media-object" style="width:60px">
+							<a href=<%= messagesTo[i].messagePath %>>
+								<div class="well ">
+									<div class="well well-sm">
+								      <img src=<%= messagesTo[i].avatarPath %> class="media-object" style="width:60px">
 								    <h3>Message de : <%= messagesTo[i].username %> </h3></div>
-									<div class="panel-body"> Objet : <%= messagesTo[i].object %> </div>	
+									<div class="well well-sm"> Objet : <%= messagesTo[i].object %> </div>	
 								</div>
+								</a>
 								<%}%>
-						</div>
+
 					</div>
 
 					<div id="sendedMessage" class="tab-pane fade">
-						<div class="panel-group">
 						<% for (var i = messagesFrom.length - 1; i >= 0; i--){ %>
-							
-								<div class="panel panel-success">
-									<div class="panel-heading">
-								      <img src="https://www.w3schools.com/bootstrap/img_avatar1.png" class="media-object" style="width:60px">
+							<a href=<%= messagesFrom[i].messagePath %> >
+								<div class="well">
+									<div class="well well-sm">
+								      <img src=<%= messagesFrom[i].avatarPath %> class="media-object" style="width:60px">
 								    <h3>Message pour : <%= messagesFrom[i].username %> </h3> </div>
-									<div class="panel-body"> Objet : <%= messagesFrom[i].object %> </div>	
+									<div class="well"> Objet : <%= messagesFrom[i].object %> </div>	
 								</div>
+								</a>
 								<%}%>
-						</div>
 					</div>
 					
 					</div>

@@ -1,3 +1,5 @@
+var utils = require("../modules/utils");
+
 function message(sequelize){
 	//import message model 
 	const Message = sequelize.import("../models/messageModel");
@@ -21,7 +23,7 @@ function message(sequelize){
 			}, 
 			attributes:['username', 'email'],
 			}).then(function(user){
-				done(user.dataValues, index); 
+				done(user, index); 
 			});
 	}; 
 	//add handle for done is not a function 
@@ -72,19 +74,32 @@ function message(sequelize){
 			where: {
 				fromUserId: req.user.id 
 			}, 
-			attributes:['toUserId','object','content'],
+			attributes:['id','toUserId','object'],
 		}).then(function(messages){
-			for (var i = messages.length - 1; i >= 0; i--) {
-				datas[i] = messages[i].dataValues;
-				//i need to be pass to the callback (undefined error catch)
-				findUserNameWithId(i, messages[i].dataValues.toUserId, function(user, index){
-					datas[index]["username"] = user.username;
-					datas[index]["email"] = user.email;
-					//need because node is async 
-					if(index == 0){
-						done(datas); 
-					} 
-				});
+			if(messages){
+				for (var i = messages.length - 1; i >= 0; i--) {
+					datas[i] = messages[i];
+					//i need to be pass to the callback (undefined error catch)
+					findUserNameWithId(i, messages[i].toUserId, function(user, index){
+						if(user){
+							datas[index]["username"] = user.username;
+							datas[index]["email"] = user.email;
+							datas[index]["avatarPath"] = utils.createValidPath(req, "/images/users/"+user.email+"/avatar.png");
+							datas[index]["messagePath"] = utils.createValidPath(req, "/message/see/"+user.username+"/"+messages[index].id);
+							//need because node is async 
+							if(index == 0){
+								done(datas); 
+							} 
+
+						}	
+						else{
+							//handle error if user not found 
+						}
+					});
+				}
+			}
+			else{
+				done(datas);
 			}
 			
 		});
@@ -97,19 +112,33 @@ function message(sequelize){
 			where: {
 				toUserId: req.user.id 
 			}, 
-			attributes:['fromUserId','object','content'],
+			attributes:['id','fromUserId','object','content'],
 		}).then(function(messages){
-			for (var i = messages.length - 1; i >= 0; i--) {
-				datas[i] = messages[i].dataValues
-				findUserNameWithId(i, messages[i].dataValues.fromUserId, function(user, index){
-					datas[index].username = user.username;
-					datas[index]["email"] = user.email;
-					if(index == 0){
-						done(datas); 
-					} 
-				});
+			if(messages){
+				for (var i = messages.length - 1; i >= 0; i--) {
+					datas[i] = messages[i];
+					//i need to be pass to the callback (undefined error catch)
+					findUserNameWithId(i, messages[i].fromUserId, function(user, index){
+						if(user){
+							datas[index]["username"] = user.username;
+							datas[index]["email"] = user.email;
+							datas[index]["avatarPath"] = utils.createValidPath(req, "/images/users/"+user.email+"/avatar.png");
+							datas[index]["messagePath"] = utils.createValidPath(req, "/message/see/"+user.username+"/"+messages[index].id);
+							//need because node is async 
+							if(index == 0){
+								done(datas); 
+							} 
+
+						}	
+						else{
+							//handle error if user not found 
+						}
+					});
+				}
 			}
-			
+			else{
+				done(datas);
+			}
 		});
 	};
 };
