@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<% include ../partials/head %>
+		<script type="text/javascript" src="https://bernii.github.io/gauge.js/dist/gauge.min.js"></script>
+	</head>
+	<body class="container">
+		<header>
+    		<% include ../partials/header %>
+		</header>
+		<main>
+			<div class="jumbotron">
+				<% if (message.length > 0) { %>
+				        <% if(success.length > 0) { %>
+				        	<div class="alert alert-success"><%= message %></div>
+				        <% } else {%>
+				        	<div class="alert alert-danger"><%= message %></div>
+				        <% } %>
+				    <% } %>
+			</div>
+		</main>
+		<footer>
+	    	<% include ../partials/footer %>
+		</footer>
+	</body>
+</html>

@@ -1,4 +1,5 @@
 var utils = require("../modules/utils");
+var bCrypt = require('bcrypt-nodejs');
 
 function message(sequelize){
 	//import message model 
@@ -26,6 +27,13 @@ function message(sequelize){
 				done(user, index); 
 			});
 	}; 
+
+	var isValidPassword = function(userpass, password) {
+ 
+        return bCrypt.compareSync(password, userpass);
+ 
+    };
+
 	//add handle for done is not a function 
 	this.addMessage = function(req, from, to, content, object, done){
 		if(from == ""){
@@ -138,6 +146,34 @@ function message(sequelize){
 			}
 			else{
 				done(datas);
+			}
+		});
+	};
+
+	this.getMessage = function(req, username, messageId, done){
+		User.findOne({
+			where: {
+				username : username
+			}, 
+		}).then(function(user){
+			if(user){
+				Message.findOne({
+					where: {
+						id: messageId, 
+						[sequelize.Op.or]: [{toUserId: user.id}, { fromUserId: user.id}]
+					}, 
+					}).then(function(message){
+						if(message){
+							done(true, message);
+						} 
+						else{
+							done(false, null);
+						}
+					});
+			}
+			else{
+				//add flash to say connection error 
+				done(false, null); 
 			}
 		});
 	};

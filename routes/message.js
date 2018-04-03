@@ -8,5 +8,6 @@ module.exports = function(router, passport, message, isLoggedIn, sequelize){
 	// GET home page 
 	router.get(prefix+'/', isLoggedIn, message_controller.index);
 	router.post(prefix+'/send', isLoggedIn, message_controller.message_post);
+	router.get(prefix+'/see/:username/:messageId', isLoggedIn, message_controller.message_get);
 
 }

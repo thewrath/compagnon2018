@@ -167,7 +167,7 @@ module.exports = function(passport, sequelize) {
 	            console.log("Error:", err);
 	 
 	            return done(null, false, {
-	                message: 'Something went wrong with your Signin'
+	                message: "Oups quelque chose c'est mal passe..."
 	            });
 	 
 	        });

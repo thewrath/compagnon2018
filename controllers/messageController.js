@@ -20,6 +20,18 @@ function messageController(message){
 		}); 	
 	};
 
+	this.message_get = function(req, res){
+		console.log(req);
+		message.getMessage(req, req.params.username, req.params.messageId,function(success, messageDatas){
+			if(success){
+				res.render('message/messagePrint', { connected : req.isAuthenticated(), message : req.flash('printMessage'), messageDatas : messageDatas });
+			}
+			else{
+				res.redirect('/message');
+			}
+		});
+	};
+
 }
 
 module.exports = function(message){
