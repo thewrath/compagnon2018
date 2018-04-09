@@ -9,4 +9,5 @@ exports.discover = function(req, res){
 
 exports.addStatus = function(req, res){
 	//not implemented yet 
+	console.log(req.params.username);
 }

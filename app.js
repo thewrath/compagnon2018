@@ -1,3 +1,4 @@
+//import des differents modules 
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -8,33 +9,39 @@ var session = require('express-session');
 var passport = require('passport');
 var sequelize = require('sequelize');
 var flash    = require('connect-flash');
-
+//import des configurations 
 var config = require('./config/config');
 var dbConfig  = require('./config/database');
 
- // pass passport for configuration
-
+//initialisation d'une app expressJS 
 var app = express();
-// view engine setup
+
+//initialisation du moteur de template (ejs)
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+
+//initialisation des differents modules lie a express 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-//required for passport and session 
-app.use(session({ secret: 'pagnoncompa2018snirprojet' })); // session secret
+
+//app.use(express.static(path.join(__dirname, 'public')));
+
+//initialisation de la session express et du gestionnaire d'utilisateur 
+app.use(session({ secret: 'pagnoncompa2018snirprojet' })); 
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+//active le stockage des donnees de l'utilisateur dans la session 
+app.use(passport.session()); 
+//initialisation du module flash 
+app.use(flash());
+//creation d'un asservissement de ressources publique (image...)
 var dir = path.join(__dirname, 'public'); 
 app.use(express.static(dir));
-//db connection with sequelize
+
+//initialisation et configuration de sequelize 
 const sequelizeInst = new sequelize(dbConfig.uri);
 
 sequelizeInst
@@ -46,27 +53,28 @@ sequelizeInst
     console.error('Unable to connect to the database:', err);
   });
 
-//allow sequelize to create table inside the DB 
+//autoriser sequelize a creer des tables dans la base de donnees 
 sequelizeInst.sync();
-//load passport configuration 
+//charge la configuration du passport 
 require('./config/passport')(passport, sequelizeInst);
-//load message configuration 
+//charge la configuration des messages 
 const message = require('./config/message')(sequelizeInst);
-//MIDDLEWARES
-//login middleware
+
+//fonction middleware permettant de verifier si un utilisateur est logge
 var isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated())
         return next();
     res.redirect('/account/login');
 };
 
+//fonction middleware permettant de verifier si un utilisateur n'est pas logge
 var isNotLoggedIn = function(req, res, next) {
   if(!req.isAuthenticated())
     return next();
   res.redirect('/account/manage');
 };
 
-//routes 
+//routage des differentes parties du site (avec middleware en parametre)
 require('./routes/index')(app, passport, isLoggedIn, sequelizeInst);
 require('./routes/group')(app, passport, isLoggedIn, sequelizeInst);
 require('./routes/message')(app, passport, message, isLoggedIn, sequelizeInst); 
@@ -75,24 +83,26 @@ require('./routes/map')(app, passport, isLoggedIn, sequelizeInst);
 
 
 
-// catch 404 and forward to error handler
+//catch de l'erreur 404 not found 
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// error handler
+//!! a desactiver en production !!//
+
+//handler pour differents erreurs 
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+  //utiliser pour le developpement 
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  //page d'erreur lors du developpement 
   res.status(err.status || 500);
   res.render('error');
 });
 
-
+//ecoute sur le port correspondant 
 app.listen(config.port);
 console.log("listen on port "+ config.port);

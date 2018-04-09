@@ -84,7 +84,7 @@ function message(sequelize){
 			}, 
 			attributes:['id','toUserId','object'],
 		}).then(function(messages){
-			if(messages){
+			if(messages.length > 0){
 				for (var i = messages.length - 1; i >= 0; i--) {
 					datas[i] = messages[i];
 					//i need to be pass to the callback (undefined error catch)
@@ -96,7 +96,7 @@ function message(sequelize){
 							datas[index]["messagePath"] = utils.createValidPath(req, "/message/see/"+user.username+"/"+messages[index].id);
 							//need because node is async 
 							if(index == 0){
-								done(datas); 
+								done(true, datas); 
 							} 
 
 						}	
@@ -107,9 +107,8 @@ function message(sequelize){
 				}
 			}
 			else{
-				done(datas);
+				done(false, datas);
 			}
-			
 		});
 		
 	};
@@ -122,7 +121,7 @@ function message(sequelize){
 			}, 
 			attributes:['id','fromUserId','object','content'],
 		}).then(function(messages){
-			if(messages){
+			if(messages.length > 0){
 				for (var i = messages.length - 1; i >= 0; i--) {
 					datas[i] = messages[i];
 					//i need to be pass to the callback (undefined error catch)
@@ -134,18 +133,20 @@ function message(sequelize){
 							datas[index]["messagePath"] = utils.createValidPath(req, "/message/see/"+user.username+"/"+messages[index].id);
 							//need because node is async 
 							if(index == 0){
-								done(datas); 
+								done(true, datas); 
 							} 
 
 						}	
 						else{
 							//handle error if user not found 
+							
 						}
 					});
 				}
 			}
 			else{
-				done(datas);
+				
+				done(false, datas);
 			}
 		});
 	};

@@ -2,8 +2,8 @@
 function messageController(message){
 
 	this.index = function(req, res){
-		message.getMessagesFromUser(req, function(messagesFromUser){
-			message.getMessagesToUser(req, function(messagesToUser){
+		message.getMessagesFromUser(req, function(successFrom, messagesFromUser){
+			message.getMessagesToUser(req, function(sucessTo, messagesToUser){
 				console.log(messagesFromUser);
 				console.log(messagesToUser);
 				res.render('message/messageMain', { connected : req.isAuthenticated(), message: req.flash('addMessage'), success : req.flash('success'), messagesFrom : messagesFromUser, messagesTo: messagesToUser});				
