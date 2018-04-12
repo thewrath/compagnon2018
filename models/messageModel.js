@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
 
     }, 
+    contentPath:{
+      type: DataTypes.STRING, 
+      allowNull: false,
+    },
     object:{
       type: DataTypes.TEXT, 
       allowNull: false, 

@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var sequelize = require('sequelize');
-var flash    = require('connect-flash');
+var flash = require('connect-flash');
 //import des configurations 
 var config = require('./config/config');
 var dbConfig  = require('./config/database');
@@ -26,7 +26,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 
 //app.use(express.static(path.join(__dirname, 'public')));
 

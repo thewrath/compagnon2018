@@ -4,6 +4,10 @@
 		<% include ../partials/head %>
 		<script type="text/javascript" src="https://bernii.github.io/gauge.js/dist/gauge.min.js"></script>
 	</head>
+	<script type="text/javascript">
+		$('input[type=file]').bootstrapFileInput();
+		$('.file-inputs').bootstrapFileInput();
+	</script>
 	<body class="container">
 		<header>
     		<% include ../partials/header %>
@@ -48,8 +52,19 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label for="attachment" class="col-sm-2 control-label">Pièce jointe</label>
+								<div class="col-sm-10">
+									<div class="file-field">
+        								<div class="btn btn-primary btn-sm float-left">
+            								<span>Ajouter des fichiers</span>
+            								<input type="file" name="attachment" multiple="multiple">
+        								</div>
+								    </div>
+								</div>
+							</div>
+							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2">
-									<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+									<input id="submit" name="submit" type="submit" value="Envoyer le message" class="btn btn-primary">
 								</div>
 							</div>
 							<div class="form-group">

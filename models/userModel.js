@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING, 
 			allowNull: false,
 		},
+		userPath:{
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 		email: {
 			type: DataTypes.STRING, 
 			validate: {
@@ -37,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
 		linkWith: {
 			type: DataTypes.INTEGER,
 		}, 
+		health: {
+			type: DataTypes.INTEGER,
+		},
 	});
 	User.prototype.generateHash = function(password) {
 		return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);

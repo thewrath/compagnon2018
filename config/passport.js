@@ -37,10 +37,10 @@ module.exports = function(passport, sequelize) {
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
  
             };
-            var generateAvatar = function(email) {
+            var generateAvatar = function(email, path) {
             	//create users directory 
             	var fs = require('fs');
-            	var userDir = require('path').join(process.env.PWD, '/public/images/users/'+email); 
+            	var userDir = require('path').join(process.env.PWD, '/public/images/users/'+path);; 
             	
             	if(!fs.existsSync(userDir)){
             		fs.mkdirSync(userDir);
@@ -49,7 +49,7 @@ module.exports = function(passport, sequelize) {
 				var identicon = require('identicon'); 
 				identicon.generate({ id : email, size : 400}, function(err, buffer){
 					if(err) throw err; 
-					fs.writeFileSync(require('path').join(process.env.PWD, '/public/images/users/'+email+'/avatar'+'.png'), buffer); 
+					fs.writeFileSync(require('path').join(process.env.PWD, '/public/images/users/'+path+'/avatar'+'.png'), buffer); 
 				});
  			}
  
@@ -79,6 +79,7 @@ module.exports = function(passport, sequelize) {
 	 							return done(null, false, req.flash('signupMessage', 'Ce nom est deja utilise '));
 	 						}
 	 						else{
+	 							var path = generateHash(email)
 	 							var userPassword = generateHash(password);
 			                    var data =
 			 
@@ -88,6 +89,8 @@ module.exports = function(passport, sequelize) {
 			                            password: userPassword,
 			 
 			                            username: req.body.username,
+
+			                            userPath : path,
 			 
 			                        };
 			 
@@ -100,7 +103,7 @@ module.exports = function(passport, sequelize) {
 			                        }
 			 
 			                        if (newUser) {
-			 							generateAvatar(email);
+			 							generateAvatar(email,path);
 			                            return done(null, newUser);
 			 
 			                        }

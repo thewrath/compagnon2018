@@ -28,12 +28,10 @@ function accountController(passport){
 	};*/
 
 	this.manage_get = function(req, res){
-		console.log(req);
 		var user = req.user;
 		//remove password sensible and generate avatar path 
 		user.password = "";
-		user.avatarPath = req.protocol+"://"+req.hostname+":3000/images/users/"+user.email+"/avatar.png"; 
-		console.log(user);
+		user.avatarPath = req.protocol+"://"+req.hostname+":3000/images/users/"+user.userPath+"/avatar.png"; 
 		res.render('account/accountManagement', {connected : req.isAuthenticated(), user : user});
 	};
 

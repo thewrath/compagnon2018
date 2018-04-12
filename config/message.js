@@ -1,5 +1,9 @@
 var utils = require("../modules/utils");
 var bCrypt = require('bcrypt-nodejs');
+var formidable = require('formidable');
+var path = require('path');
+var fs = require('fs-extra');
+var util = require('util');
 
 function message(sequelize){
 	//import message model 
@@ -22,7 +26,7 @@ function message(sequelize){
 			where: {
 				id: id
 			}, 
-			attributes:['username', 'email'],
+			attributes:['username', 'email', 'userPath'],
 			}).then(function(user){
 				done(user, index); 
 			});
@@ -32,6 +36,65 @@ function message(sequelize){
  
         return bCrypt.compareSync(password, userpass);
  
+    };
+
+    var generateHash = function(text) {
+ 
+                return bCrypt.hashSync(text, bCrypt.genSaltSync(8), null);
+ 
+    };
+
+    function uploadMedia (req, path) { // This is just for my Controller same as app.post(url, function(req,res,next) {....
+	  var form = new formidable.IncomingForm()
+	  const uploadDir = path.join(__dirname, 'public/images/messages/'+path); //i made this  before the function because i use it multiple times for deleting later
+	  form.multiples = true;
+	  form.keepExtensions = true;
+	  form.uploadDir = uploadDir;
+	  form.parse(req, (err, fields, files) => {
+	    //if (err) return res.status(500).json({ error: err })
+	    
+	  });
+	  form.on('fileBegin', function (name, file) {
+	    const [fileName, fileExt] = file.name.split('.');
+	    file.path = path.join(uploadDir, `${fileName}_${new Date().getTime()}.${fileExt}`);
+	  });
+	}
+
+    var saveFiles = function(req,path){
+    	console.log("STOCKAGE DU FICHIER");
+    	var form = new formidable.IncomingForm();
+        form.parse(req, function (err, fields, files){
+        	            res.writeHead(200, {'content-type': 'text/plain'});
+            res.write('received upload:\n\n');
+            res.end(util.inspect({fields: fields, files: files}));
+        });
+
+        form.on('fileBegin', function(name, file) {
+        	file.path = path.join(__dirname, '/temp/') + file.name;
+		});
+
+        form.on('progress', function(bytesReceived, bytesExpected) {
+        	var percent_complete = (bytesReceived / bytesExpected) * 100;
+        	console.log(percent_complete.toFixed(2));
+		});
+
+        form.on('end', function (fields, files) {
+        /* Temporary location of our uploaded file */
+        var temp_path = this.attachment[0].path;
+        /* The file name of the uploaded file */
+        var file_name = this.attachment[0].name;
+        /* Location where we want to copy the uploaded file */
+        var new_location = path.join(__dirname, 'public/images/messages'+path+file_name);
+ 
+        fs.copy(temp_path, new_location + file_name, function (err) {
+        if (err) {
+            console.error(err);
+    	} else {
+            console.log("success!")
+        }
+            });
+        });
+
     };
 
 	//add handle for done is not a function 
@@ -47,6 +110,7 @@ function message(sequelize){
 					 	var data = {
 						 	fromUserId : fromId.id, 
 						 	toUserId : toId.id,
+						 	contentPath: generateHash(from),
 						 	object: object,
 						 	content : content
 						 };
@@ -57,6 +121,8 @@ function message(sequelize){
 						 		return done(false);
 						 	}
 							if(newMessage){
+								uploadMedia(req, newMessage.contentPath);
+								//saveFiles(req, newMessage.contentPath);
 								req.flash('addMessage', "le message à bien été envoyé.");
 								req.flash('success', 'true');
 								return done(true);
@@ -92,7 +158,7 @@ function message(sequelize){
 						if(user){
 							datas[index]["username"] = user.username;
 							datas[index]["email"] = user.email;
-							datas[index]["avatarPath"] = utils.createValidPath(req, "/images/users/"+user.email+"/avatar.png");
+							datas[index]["avatarPath"] = utils.createValidPath(req, "/images/users/"+user.userPath+"/avatar.png");
 							datas[index]["messagePath"] = utils.createValidPath(req, "/message/see/"+user.username+"/"+messages[index].id);
 							//need because node is async 
 							if(index == 0){
@@ -129,7 +195,7 @@ function message(sequelize){
 						if(user){
 							datas[index]["username"] = user.username;
 							datas[index]["email"] = user.email;
-							datas[index]["avatarPath"] = utils.createValidPath(req, "/images/users/"+user.email+"/avatar.png");
+							datas[index]["avatarPath"] = utils.createValidPath(req, "/images/users/"+user.userPath+"/avatar.png");
 							datas[index]["messagePath"] = utils.createValidPath(req, "/message/see/"+user.username+"/"+messages[index].id);
 							//need because node is async 
 							if(index == 0){
@@ -184,14 +250,3 @@ module.exports = function(sequelize){
 	return new message(sequelize);
 }
 
-//eviter les messages vides 
-
-/*to send message 
-message.addMessage('thomas', 'thomas', 'content test', function(first, done){
-			if(done){
-				res.render('message/messageMain', {connected : req.isAuthenticated()});
-			}
-			else{
-				res.redirect('/');
-			}
-		}); */

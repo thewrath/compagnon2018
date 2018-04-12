@@ -14,8 +14,10 @@
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "^4.15.5",
+    "express-fileupload": "^0.4.0",
     "express-session": "^1.15.6",
     "flash-message": "^2.0.1",
+    "formidable": "^1.2.1",
     "identicon": "^2.1.1",
     "morgan": "^1.9.0",
     "mysql2": "^1.5.2",
@@ -23,6 +25,7 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "sequelize": "^4.37.0",
-    "serve-favicon": "^2.4.5"
+    "serve-favicon": "^2.4.5",
+    "util": "^0.10.3"
   }
 }
