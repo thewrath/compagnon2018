@@ -12,7 +12,7 @@ function messageController(message){
 	};
 
 	this.message_post = function(req, res){
-		message.addMessage(req, req.user.username,req.body.username, req.body.content, req.body.object, function(success){
+		message.addMessage(req,function(success){
 			res.redirect('/message'); 
 		}); 	
 	};

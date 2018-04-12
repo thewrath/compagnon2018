@@ -43,103 +43,68 @@ function message(sequelize){
                 return bCrypt.hashSync(text, bCrypt.genSaltSync(8), null);
  
     };
-
-    function uploadMedia (req, path) { // This is just for my Controller same as app.post(url, function(req,res,next) {....
-	  var form = new formidable.IncomingForm()
-	  const uploadDir = path.join(__dirname, 'public/images/messages/'+path); //i made this  before the function because i use it multiple times for deleting later
-	  form.multiples = true;
-	  form.keepExtensions = true;
-	  form.uploadDir = uploadDir;
-	  form.parse(req, (err, fields, files) => {
-	    //if (err) return res.status(500).json({ error: err })
-	    
-	  });
-	  form.on('fileBegin', function (name, file) {
-	    const [fileName, fileExt] = file.name.split('.');
-	    file.path = path.join(uploadDir, `${fileName}_${new Date().getTime()}.${fileExt}`);
-	  });
-	}
-
-    var saveFiles = function(req,path){
-    	console.log("STOCKAGE DU FICHIER");
-    	var form = new formidable.IncomingForm();
-        form.parse(req, function (err, fields, files){
-        	            res.writeHead(200, {'content-type': 'text/plain'});
-            res.write('received upload:\n\n');
-            res.end(util.inspect({fields: fields, files: files}));
-        });
-
-        form.on('fileBegin', function(name, file) {
-        	file.path = path.join(__dirname, '/temp/') + file.name;
-		});
-
-        form.on('progress', function(bytesReceived, bytesExpected) {
-        	var percent_complete = (bytesReceived / bytesExpected) * 100;
-        	console.log(percent_complete.toFixed(2));
-		});
-
-        form.on('end', function (fields, files) {
-        /* Temporary location of our uploaded file */
-        var temp_path = this.attachment[0].path;
-        /* The file name of the uploaded file */
-        var file_name = this.attachment[0].name;
-        /* Location where we want to copy the uploaded file */
-        var new_location = path.join(__dirname, 'public/images/messages'+path+file_name);
- 
-        fs.copy(temp_path, new_location + file_name, function (err) {
-        if (err) {
-            console.error(err);
-    	} else {
-            console.log("success!")
-        }
-            });
-        });
-
-    };
-
 	//add handle for done is not a function 
-	this.addMessage = function(req, from, to, content, object, done){
-		if(from == ""){
-			req.flash('addMessage', "Veuillez entrer un nom d'utilisateur");
-			return done(false); 
-		}
-		findUserIdWithName(from, function(fromId){
-			if(fromId){
-				findUserIdWithName(to, function(toId){
-					 if(toId){
-					 	var data = {
-						 	fromUserId : fromId.id, 
-						 	toUserId : toId.id,
-						 	contentPath: generateHash(from),
-						 	object: object,
-						 	content : content
-						 };
+	this.addMessage = function(req, done){
+		var form = new formidable.IncomingForm()
+		form.uploadDir = "./temp"
+		form.multiples = true;
+		form.keepExtensions = true;
 
-						 Message.create(data).then(function(newMessage, created){
-						 	if(!newMessage){
-						 		req.flash('addMessage', "le message n'a pas pu être envoyé.");
-						 		return done(false);
-						 	}
-							if(newMessage){
-								uploadMedia(req, newMessage.contentPath);
-								//saveFiles(req, newMessage.contentPath);
-								req.flash('addMessage', "le message à bien été envoyé.");
-								req.flash('success', 'true');
-								return done(true);
-							}
-						 }); 
-					 }
-					 else{
-					 	req.flash('addMessage', "Le destinataire n'existe pas."); 
-					 	return done(false); 
-					 }
-				}); 
-			}
-			else{
-				req.flash('addMessage', "Messagerie error");
+        form.parse(req, function (err, fields, files){
+		    console.log(fields);
+			console.log(files);
+			var to = fields.username;
+			var from = req.user.username;
+			var content = fields.content;
+			var object = fields.object;
+			if(from == ""){
+				req.flash('addMessage', "Veuillez entrer un nom d'utilisateur");
 				return done(false); 
 			}
-		});
+			findUserIdWithName(from, function(fromId){
+				if(fromId){
+					findUserIdWithName(to, function(toId){
+						 if(toId){
+						 	var data = {
+							 	fromUserId : fromId.id, 
+							 	toUserId : toId.id,
+							 	contentPath: generateHash(from),
+							 	object: object,
+							 	content : content
+							 };
+
+							 Message.create(data).then(function(newMessage, created){
+							 	if(!newMessage){
+							 		req.flash('addMessage', "le message n'a pas pu être envoyé.");
+							 		return done(false);
+							 	}
+								if(newMessage){
+									req.flash('addMessage', "le message à bien été envoyé.");
+									req.flash('success', 'true');
+									//creer le dossier et ranger le fichier dedans + delete les fichiers temporaire
+									fs.rename(files.attachment.path, './public/messages/'+newMessage.contentPath+"/"+files.attachment.name, function(err) {
+							        if (err)
+							            throw err;
+							          console.log('renamed complete');  
+							        });
+									return done(true);
+								}
+							 }); 
+						 }
+						 else{
+						 	req.flash('addMessage', "Le destinataire n'existe pas."); 
+						 	return done(false); 
+						 }
+					}); 
+				}
+				else{
+					req.flash('addMessage', "Messagerie error");
+					return done(false); 
+				}
+			});        
+        });	
+
+		
 	};
 
 	this.getMessagesFromUser = function(req, done){
