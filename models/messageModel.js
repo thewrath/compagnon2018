@@ -15,9 +15,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
 
     }, 
-    contentPath:{
+    attachmentPath:{
       type: DataTypes.STRING, 
       allowNull: false,
+    },
+    asAttachment:{
+      type: DataTypes.INTEGER,
+      defautValue: 0,
     },
     object:{
       type: DataTypes.TEXT, 

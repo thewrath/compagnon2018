@@ -4,6 +4,7 @@ var formidable = require('formidable');
 var path = require('path');
 var fs = require('fs-extra');
 var util = require('util');
+var mkdirp = require('mkdirp');
 
 function message(sequelize){
 	//import message model 
@@ -38,11 +39,22 @@ function message(sequelize){
  
     };
 
-    var generateHash = function(text) {
- 
-                return bCrypt.hashSync(text, bCrypt.genSaltSync(8), null);
- 
+    var generateHash = function(text, saltSize, isPassword) {
+		var hash = bCrypt.hashSync(text, bCrypt.genSaltSync(saltSize), null);
+		if(!isPassword){
+		var n = ((hash.search("/") > hash.search(".")) ? hash.search("/") : hash.search("."));
+			console.log("REPLACE ALL WRONG CHAR")
+			console.log(hash); 
+			//use regex to delete all / and ..  
+			for (var i = 0; i < n ; i++) {
+				hash = hash.replace("/", "a");
+				hash = hash.replace(".", "b");
+			}	
+			console.log(hash);
+		}
+        return hash;
     };
+
 	//add handle for done is not a function 
 	this.addMessage = function(req, done){
 		var form = new formidable.IncomingForm()
@@ -68,7 +80,8 @@ function message(sequelize){
 						 	var data = {
 							 	fromUserId : fromId.id, 
 							 	toUserId : toId.id,
-							 	contentPath: generateHash(from),
+							 	attachmentPath: generateHash(from, 2, false),
+							 	asAttachment: files.attachment.length,
 							 	object: object,
 							 	content : content
 							 };
@@ -82,12 +95,19 @@ function message(sequelize){
 									req.flash('addMessage', "le message à bien été envoyé.");
 									req.flash('success', 'true');
 									//creer le dossier et ranger le fichier dedans + delete les fichiers temporaire
-									fs.rename(files.attachment.path, './public/messages/'+newMessage.contentPath+"/"+files.attachment.name, function(err) {
-							        if (err)
-							            throw err;
-							          console.log('renamed complete');  
-							        });
-									return done(true);
+									mkdirp('./public/images/messages/'+newMessage.attachmentPath+"/", function(err){
+										for (var i = files.attachment.length - 1; i >= 0; i--) {
+											fs.rename(files.attachment[i].path, './public/images/messages/'+newMessage.attachmentPath+"/"+files.attachment[i].name, function(err) {
+									        if (err)
+									            throw err;
+								          	console.log('renamed complete');  
+									        });
+										}
+										return done(true);
+										
+									});
+									
+									
 								}
 							 }); 
 						 }
@@ -182,7 +202,9 @@ function message(sequelize){
 		});
 	};
 
-	this.getMessage = function(req, username, messageId, done){
+	this.getMessage = function(req, done){
+		var username = req.params.username;
+		var messageId = req.params.messageId;
 		User.findOne({
 			where: {
 				username : username

@@ -19,6 +19,7 @@
     "flash-message": "^2.0.1",
     "formidable": "^1.2.1",
     "identicon": "^2.1.1",
+    "mkdirp": "^0.5.1",
     "morgan": "^1.9.0",
     "mysql2": "^1.5.2",
     "passport": "^0.4.0",
