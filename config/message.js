@@ -231,7 +231,7 @@ function message(sequelize){
 			}
 		});
 	};
-};
+}
 
 module.exports = function(sequelize){
 	return new message(sequelize);

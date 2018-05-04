@@ -20,8 +20,14 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
+var logger = function(req, res, next){
+  console.log("REQUEST SEND TO SERVER");
+  console.log(req.url)
+  next();
+};
 
+//add loggerto handle all routes 
+app.use(logger);
 //initialisation des differents modules lie a express 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -56,8 +62,10 @@ sequelizeInst
 sequelizeInst.sync();
 //charge la configuration du passport 
 require('./config/passport')(passport, sequelizeInst);
-//charge la configuration des messages 
+//récupération des gestionnaire de modèles sequelize 
 const message = require('./config/message')(sequelizeInst);
+const user = require('./config/user')(sequelizeInst);
+
 
 //fonction middleware permettant de verifier si un utilisateur est logge
 var isLoggedIn = function(req, res, next) {
@@ -74,12 +82,11 @@ var isNotLoggedIn = function(req, res, next) {
 };
 
 //routage des differentes parties du site (avec middleware en parametre)
-require('./routes/index')(app, passport, isLoggedIn, sequelizeInst);
+require('./routes/index')(app, passport, user, isLoggedIn, sequelizeInst);
 require('./routes/group')(app, passport, isLoggedIn, sequelizeInst);
 require('./routes/message')(app, passport, message, isLoggedIn, sequelizeInst); 
 require('./routes/account')(app, passport, isLoggedIn, isNotLoggedIn, sequelizeInst);
 require('./routes/map')(app, passport, isLoggedIn, sequelizeInst);
-
 
 
 //catch de l'erreur 404 not found 
