@@ -1,3 +1,4 @@
 module.exports = {
-	'port' : 80
+	'port' : 8100,
+	'ip' : '0.0.0.0'
 }

@@ -110,5 +110,5 @@ app.use(function(err, req, res, next) {
 });
 
 //ecoute sur le port correspondant 
-app.listen(config.port);
+app.listen(config.port, config.ip);
 console.log("listen on port "+ config.port);
